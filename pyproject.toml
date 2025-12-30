@@ -1,0 +1,87 @@
+[project]
+name = "collaboard"
+authors = [
+    { name = "Jovani Badinga", email = "jovani.badinga7@gmail.com" }
+]
+version = "0.1.0"
+description = "A lightweight, real time meeting application enhanced with AI"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "django>=6.0",
+    "django-ratelimit>=4.1.0",
+    "django-redis>=6.0.0",
+    "psycopg2-binary>=2.9.11",
+    "python-dotenv>=1.2.1",
+]
+
+[dependency-groups]
+dev = [
+    "django-browser-reload>=1.21.0",
+    "ruff>=0.14.10",
+    "ty>=0.0.7",
+]
+
+[tool.ruff]
+# Match Black's style.
+line-length = 88
+indent-width = 4
+# Target Python 3.12
+target-version = "py312"
+
+[tool.ruff.lint]
+# Enable pycodestyle (E) and Pyflakes (F) rules.
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = []
+# Allow fixing all enabled rules.
+fixable = ["ALL"]
+unfixable = []
+[tool.ruff.format]
+# Use double quotes and spaces (Black style).
+quote-style = "double"
+indent-style = "space"
+# Respect trailing commas and auto line endings.
+skip-magic-trailing-comma = false
+line-ending = "auto"
+# Docstring formatting (off by default).
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint.pydocstyle]
+# Enforce Google-style
+
+[tool.ty]
+# Production-level strictness
+terminal.error-on-warning = true
+terminal.output-format = "full"
+
+[tool.ty.analysis]
+respect-type-ignore-comments = true
+
+[tool.ty.environment]
+# Set to your specific version; ty defaults to 3.14
+python-version = "3.14"
+# Removed "src" to support Django flat layout
+root = ["."]
+
+[tool.ty.src]
+# Search current directory; exclude common artifacts
+include = ["."]
+exclude = ["**/__pycache__", "build/", "dist/", "**/migrations/**"]
+respect-ignore-files = true
+
+[tool.ty.rules]
+possibly-unresolved-reference = "error"
+division-by-zero = "error"
+
+[[tool.ty.overrides]]
+# Relax rules for tests
+include = ["**/tests/**", "**/test_*.py"]
+[tool.ty.overrides.rules]
+possibly-unresolved-reference = "warn"
+
+[[tool.ty.overrides]]
+# Explicitly ignore all rules for Django migrations
+include = ["**/migrations/*.py"]
+[tool.ty.overrides.rules]
+possibly-unresolved-reference = "ignore"

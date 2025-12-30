@@ -1,0 +1,27 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Collaboard</title>
+    <link href="{% static 'navbar_user.css' %}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+    <a class="logo-container" href="{% url 'landing' %}" style="text-decoration: none;">
+        <div class="logo">C</div>
+        <span class="app-name">Collaboard</span>
+    </a>
+
+    <div class="auth-buttons">
+        <!-- TODO: This should be logout view -->
+        <form action="#" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button class="btn btn-login" type="submit">Logout</button>
+        </form>
+        <!-- TODO: This should be logout view -->
+        <a class="btn btn-signup" href="#">My Account</a>
+    </div>
+</nav>
+</body>
+</html>

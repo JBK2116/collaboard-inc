@@ -1,0 +1,17 @@
+# DJANGO
+SECRET_KEY="enter the django secret key"
+
+# ENVIRONMENT TYPE
+IS_DEV_ENV="True or False here"
+
+# EMAIL CONFIGURATION
+SENDGRID_API_KEY="Valid API key from sendgrid"
+EMAIL_FROM_USER="name of email sender"
+EMAIL_NAME="name of email sender"
+
+# DATABASE CONFIGURATION
+DB_NAME="database name"
+DB_USER="database user"
+DB_PASSWORD="database password"
+DB_HOST="database host"
+DB_PORT="database port"

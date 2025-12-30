@@ -1,2 +1,1 @@
-# collaboard-inc
-An improved version of Collaboard. Currently in progress.
+An improved version of Collaboard. Project in progress.
