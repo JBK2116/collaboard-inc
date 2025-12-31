@@ -1,5 +1,6 @@
 # DJANGO
 SECRET_KEY="enter the django secret key"
+VERIFICATION_EMAIL_SALT="salt key"
 
 # ENVIRONMENT TYPE
 IS_DEV_ENV="True or False here"

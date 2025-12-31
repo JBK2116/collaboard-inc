@@ -1,0 +1,85 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Collaboard - Log In</title>
+        <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/x-icon" />
+        <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180" />
+        <link href="{% static 'images/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png" />
+        <link href="{% static 'images/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png" />
+        <link href="{% static 'authentication/login.css' %}" rel="stylesheet" />
+        <link href="{% static 'navbar_guest.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        {% include 'navbar_guest.html' %}
+
+        <main class="login-container">
+            {% if password_reset_done %}
+            <div class="success-overlay">
+                <div class="success-box">
+                    <div class="success-icon">✓</div>
+                    <h2>Password Reset Successful</h2>
+                    <p>Your password has been reset. You can now log in with your new password.</p>
+                </div>
+            </div>
+            <script>
+                setTimeout(function () {
+                    document.querySelector('.success-overlay').style.opacity = '0';
+                    setTimeout(function () {
+                        document.querySelector('.success-overlay').remove();
+                    }, 300);
+                }, 3000);
+            </script>
+            {% endif %}
+
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to your Collaboard account</p>
+                </div>
+
+                <form class="login-form" method="post">
+                    {% csrf_token %}
+
+                    <!-- General form errors -->
+                    {% if form.non_field_errors %}
+                    <div class="form-errors">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input id="email" name="email" required type="email" value="{{ form.email.value|default:'' }}" />
+                        {% if form.email.errors %}
+                        <div class="field-error">{{ form.email.errors.0 }}</div>
+                        {% elif invalid_email_password %}
+                        <div class="field-error">Invalid email or password</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input id="password" name="password" required type="password" />
+                        {% if form.password.errors %}
+                        <div class="field-error">{{ form.password.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input name="remember_me" type="checkbox" />
+                            <span>Remember me</span>
+                        </label>
+                        <a class="forgot-password" href="{% url 'password_reset' %}">Forgot password?</a>
+                    </div>
+
+                    <button class="form-btn-login" type="submit">Sign In</button>
+
+                    <div class="login-footer">
+                        <p>Don't have an account? <a href="{% url 'signup' %}">Create one</a></p>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </body>
+</html>

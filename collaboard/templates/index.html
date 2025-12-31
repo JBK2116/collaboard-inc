@@ -1,100 +1,102 @@
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Collaboard - Simple Meeting Hosting</title>
-    <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/x-icon">
-    <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
-    <link href="{% static 'images/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png">
-    <link href="{% static 'images/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png">
-    <link href="{% static 'index.css' %}" rel="stylesheet">
-    <link href="{% static 'navbar_guest.css' %}" rel="stylesheet">
-</head>
-<body>
-<!-- Navbar -->
-{% include 'navbar_guest.html' %}
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Collaboard - Simple Meeting Hosting</title>
+        <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/x-icon" />
+        <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180" />
+        <link href="{% static 'images/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png" />
+        <link href="{% static 'images/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png" />
+        <link href="{% static 'index.css' %}" rel="stylesheet" />
+        <link href="{% static 'navbar_guest.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Navbar -->
+        {% include 'navbar_guest.html' %}
 
-<!-- Hero Section -->
-<section class="hero">
-    <div class="hero-content">
-        <h1 class="hero-title">
-            Simple Meetings.<br>
-            <span class="highlight">Powerful Insights.</span>
-        </h1>
-        <p class="hero-description">
-            Host flexible meetings with ease and gather valuable data to improve your team's collaboration.
-            No complex setup, no learning curve - just effective meetings that work.
-        </p>
-        <div class="hero-actions">
-            <a class="btn btn-primary" href="{% url 'signup' %}">Start Free Meeting</a>
-            <a class="btn btn-secondary" href="#join">Join Meeting</a>
-        </div>
-    </div>
-</section>
-
-<!-- Join Meeting Section -->
-<section class="join-section" id="join">
-    <div class="container">
-        <div class="join-content">
-            <h2>Join a Meeting</h2>
-            <p>Enter your 8-digit access code to join an ongoing meeting</p>
-            <!-- Update the action HREF once the join meeting logic is made -->
-            <form action="#" class="join-form" id="joinForm" method="POST">
-                {% csrf_token %}
-                <div class="code-input-container">
-                    <label for="accessCode"></label><input
-                        class="code-input"
-                        id="accessCode"
-                        maxlength="8"
-                        name="accessCode"
-                        pattern="[0-9]{8}"
-                        placeholder="12345678"
-                        required
-                        type="text"
-                >
-                    <label for="participantName"></label><input
-                        autocomplete="off"
-                        class="code-input"
-                        id="participantName"
-                        maxlength="30"
-                        name="participantName"
-                        placeholder="Your Name"
-                        required
-                        style="min-width: 160px;"
-                        type="text"
-                >
-                    <button class="btn btn-join" type="submit">Join Meeting</button>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Simple Meetings.<br />
+                    <span class="highlight">Powerful Insights.</span>
+                </h1>
+                <p class="hero-description">
+                    Host flexible meetings with ease and gather valuable data to improve your team's collaboration. No complex setup, no learning
+                    curve - just effective meetings that work.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="{% url 'signup' %}">Start Free Meeting</a>
+                    <a class="btn btn-secondary" href="#join">Join Meeting</a>
                 </div>
-            </form>
-        </div>
-    </div>
-</section>
+            </div>
+        </section>
 
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <p>&copy; 2025 Collaboard. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
-<script>
-    document.getElementById("joinForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const code = document.getElementById("accessCode").value;
-        const name = document.getElementById("participantName").value;
-        if (code.length === 8 && name.length > 0 && name.length <= 30) {
-            this.action = `/meeting/${code}/participant/`; // url path of submission
-            this.submit();
-        }
-    });
-    // Restrict participant name to 30 characters in real time
-    document.getElementById("participantName").addEventListener("input", function () {
-        if (this.value.length > 30) {
-            this.value = this.value.slice(0, 30);
-        }
-    });
-</script>
-</body>
+        <!-- Join Meeting Section -->
+        <section class="join-section" id="join">
+            <div class="container">
+                <div class="join-content">
+                    <h2>Join a Meeting</h2>
+                    <p>Enter your 8-digit access code to join an ongoing meeting</p>
+                    <!-- Update the action HREF once the join meeting logic is made -->
+                    <form action="#" class="join-form" id="joinForm" method="POST">
+                        {% csrf_token %}
+                        <div class="code-input-container">
+                            <label for="accessCode"></label
+                            ><input
+                                class="code-input"
+                                id="accessCode"
+                                maxlength="8"
+                                name="accessCode"
+                                pattern="[0-9]{8}"
+                                placeholder="12345678"
+                                required
+                                type="text"
+                            />
+                            <label for="participantName"></label
+                            ><input
+                                autocomplete="off"
+                                class="code-input"
+                                id="participantName"
+                                maxlength="30"
+                                name="participantName"
+                                placeholder="Your Name"
+                                required
+                                style="min-width: 160px"
+                                type="text"
+                            />
+                            <button class="btn btn-join" type="submit">Join Meeting</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <p>&copy; 2025 Collaboard. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+        <script>
+            document.getElementById('joinForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const code = document.getElementById('accessCode').value;
+                const name = document.getElementById('participantName').value;
+                if (code.length === 8 && name.length > 0 && name.length <= 30) {
+                    this.action = `/meeting/${code}/participant/`; // url path of submission
+                    this.submit();
+                }
+            });
+            // Restrict participant name to 30 characters in real time
+            document.getElementById('participantName').addEventListener('input', function () {
+                if (this.value.length > 30) {
+                    this.value = this.value.slice(0, 30);
+                }
+            });
+        </script>
+    </body>
 </html>

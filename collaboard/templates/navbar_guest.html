@@ -1,22 +1,22 @@
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Collaboard</title>
-    <link href="{% static 'navbar_guest.css' %}" rel="stylesheet">
-</head>
-<body>
-<nav class="navbar">
-    <a class="logo-container" href="{% url 'landing' %}" style="text-decoration: none;">
-        <div class="logo">C</div>
-        <span class="app-name">Collaboard</span>
-    </a>
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Collaboard</title>
+        <link href="{% static 'navbar_guest.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        <nav class="navbar">
+            <a class="logo-container" href="{% url 'landing' %}" style="text-decoration: none">
+                <div class="logo">C</div>
+                <span class="app-name">Collaboard</span>
+            </a>
 
-    <div class="auth-buttons">
-        <a class="btn btn-login" href="{% url 'login' %}">Log In</a>
-        <a class="btn btn-signup" href="{% url 'signup' %}">Create Account</a>
-    </div>
-</nav>
-</body>
+            <div class="auth-buttons">
+                <a class="btn btn-login" href="{% url 'login' %}">Log In</a>
+                <a class="btn btn-signup" href="{% url 'signup' %}">Create Account</a>
+            </div>
+        </nav>
+    </body>
 </html>

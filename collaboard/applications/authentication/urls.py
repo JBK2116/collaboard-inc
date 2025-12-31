@@ -10,6 +10,7 @@ from ..authentication import views
 urlpatterns: list[Any] = [
     path("login/", views.login, name="login"),
     path("signup/", views.signup, name="signup"),
+    path("verify-email/", views.verify_email, name="verify_email"),
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(

@@ -65,7 +65,7 @@ else:
 
 # Application definition
 
-PROJECT_APPS = ["apps.authentication"]
+PROJECT_APPS = ["applications.authentication"]
 EXTRA_DEPENDENCY_APPS = ["django_browser_reload"]
 
 INSTALLED_APPS = [
@@ -138,7 +138,10 @@ DEFAULT_FROM_EMAIL = get_env_var("EMAIL_FROM_USER")
 EMAIL_FROM_USER = get_env_var("EMAIL_FROM_USER")
 
 # SendGrid settings
-SENDGRID_SANDBOX_MODE_IN_DEBUG = True  # False if you want to allow sending emails in development mode, True if you don't
+SENDGRID_SANDBOX_MODE_IN_DEBUG = (
+    False  # False if you want to allow sending emails in development mode,
+)
+# True if you don't
 SENDGRID_TRACK_EMAIL_OPENS = True
 SENDGRID_TRACK_CLICKS_HTML = True
 SENDGRID_TRACK_CLICKS_PLAIN = True
@@ -217,9 +220,8 @@ CACHES = {  # configured alongside `django-redis` package
 }
 
 
-# Custom User
-# TODO: Define this user model and run the migrations, then uncomment this
-# AUTH_USER_MODEL = "auth.CustomUser"
+# Custom User Model
+AUTH_USER_MODEL = "authentication.CustomUser"
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

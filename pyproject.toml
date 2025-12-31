@@ -11,6 +11,7 @@ dependencies = [
     "django>=6.0",
     "django-ratelimit>=4.1.0",
     "django-redis>=6.0.0",
+    "django-sendgrid-v5>=1.3.0",
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.1",
 ]
@@ -51,7 +52,6 @@ docstring-code-line-length = "dynamic"
 # Enforce Google-style
 
 [tool.ty]
-# Production-level strictness
 terminal.error-on-warning = true
 terminal.output-format = "full"
 
@@ -59,29 +59,25 @@ terminal.output-format = "full"
 respect-type-ignore-comments = true
 
 [tool.ty.environment]
-# Set to your specific version; ty defaults to 3.14
-python-version = "3.14"
-# Removed "src" to support Django flat layout
-root = ["."]
+python-version = "3.12"
+# Point to the actual Django project root for imports
+root = ["./collaboard"]
 
 [tool.ty.src]
-# Search current directory; exclude common artifacts
-include = ["."]
-exclude = ["**/__pycache__", "build/", "dist/", "**/migrations/**"]
+# Search inside the collaboard directory
+include = ["collaboard"]
+exclude = [
+    "**/__pycache__",
+    "**/migrations/**",
+    "collaboard/static/**",
+    "collaboard/templates/**"
+]
 respect-ignore-files = true
 
 [tool.ty.rules]
 possibly-unresolved-reference = "error"
-division-by-zero = "error"
 
 [[tool.ty.overrides]]
-# Relax rules for tests
-include = ["**/tests/**", "**/test_*.py"]
+include = ["**/tests.py", "**/test_*.py"]
 [tool.ty.overrides.rules]
 possibly-unresolved-reference = "warn"
-
-[[tool.ty.overrides]]
-# Explicitly ignore all rules for Django migrations
-include = ["**/migrations/*.py"]
-[tool.ty.overrides.rules]
-possibly-unresolved-reference = "ignore"
