@@ -1,26 +1,20 @@
+from typing import Any
+
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_http_methods
 
 from ..authentication import services
 from ..utils import user_exists
-from .forms import SignupForm
+from .forms import LoginForm, SignupForm
+from .models import CustomUser
 
-# Create your views here.
-
-
-def landing(request: HttpRequest) -> HttpResponse:
-    return render(request=request, template_name="index.html", context={})
+# TODO: Add rate limiting to these views via `django-ratelimit` package
 
 
-def login(request: HttpRequest) -> HttpResponse:
-    return render(
-        request=request,
-        template_name="authentication/login.html",
-        context={"password_reset_done": False, "invalid_email_password": False},
-    )
-
-
+@require_http_methods(["GET", "POST"])
 def signup(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = SignupForm(request.POST)
@@ -63,18 +57,95 @@ def signup(request: HttpRequest) -> HttpResponse:
             template_name="authentication/verify_account_email_sent.html",
             context={"email": form.cleaned_data["email"]},
         )
+    else:
+        if request.user.is_authenticated:
+            return redirect("dashboard")
+        return render(
+            request=request,
+            template_name="authentication/signup.html",
+            context={
+                "form": SignupForm(),
+                "email_exists": False,
+                "email_sent_error": False,
+            },
+        )
 
+
+@require_http_methods(["GET"])
+def verify_email(request: HttpRequest) -> HttpResponse:
+    token: str | None = request.GET.get("token")
+    if not token:
+        return render(
+            request=request,
+            template_name="authentication/email_verified.html",
+            context={"email_verified": False},
+        )
+    payload: dict[str, Any] | None = services.verify_account_verification_token(token)
+    if payload is None:
+        return render(
+            request=request,
+            template_name="authentication/email_verified.html",
+            context={"email_verified": False},
+        )
+    # email is verified by now
+    new_user: CustomUser = CustomUser(
+        email=payload["email"],
+        first_name=payload["first_name"],
+        last_name=payload["last_name"],
+    )
+    new_user.password = payload["password"]
+    new_user.save()
     return render(
         request=request,
-        template_name="authentication/signup.html",
-        context={
-            "form": SignupForm(),
-            "email_exists": False,
-            "email_sent_error": False,
-        },
+        template_name="authentication/email_verified.html",
+        context={"email_verified": True},
     )
 
 
-# TODO: Implement this
-def verify_email(request: HttpRequest) -> HttpResponse:
-    pass
+@require_http_methods(["GET", "POST"])
+def login_user(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form: LoginForm = LoginForm(request.POST)
+        if not form.is_valid():
+            return render(
+                request=request,
+                template_name="authentication/login.html",
+                context={
+                    "form": form,
+                    "password_reset_done": False,
+                    "invalid_email_password": False,
+                },
+            )
+        # form is valid by now
+        user: CustomUser | None = authenticate(
+            email=form.cleaned_data["email"], password=form.cleaned_data["password"]
+        )
+        if user is None:
+            return render(
+                request=request,
+                template_name="authentication/login.html",
+                context={
+                    "form": form,
+                    "password_reset_done": False,
+                    "invalid_email_password": True,
+                },
+            )
+        # user is authenticated by now
+        login(request, user)
+        if request.POST.get("remember_me"):
+            request.session.set_expiry(services.SESSION_EXPIRY_SECONDS)
+        else:
+            request.session.set_expiry(0)  # expire on browser close
+        return redirect("dashboard")
+    else:
+        if request.user.is_authenticated:
+            return redirect("dashboard")
+        return render(
+            request=request,
+            template_name="authentication/login.html",
+            context={
+                "password_reset_done": False,
+                "invalid_email_password": False,
+                "form": LoginForm(),
+            },
+        )

@@ -8,7 +8,8 @@ from ..authentication import views
 
 # TODO: Add paths for verifying user email after signup attempt
 urlpatterns: list[Any] = [
-    path("login/", views.login, name="login"),
+    path("login/", views.login_user, name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("signup/", views.signup, name="signup"),
     path("verify-email/", views.verify_email, name="verify_email"),
     path(

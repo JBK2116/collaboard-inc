@@ -13,6 +13,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 
 EXPIRATION_SECONDS = 60 * 60 * 24  # 24 Hours
+SESSION_EXPIRY_SECONDS = 60 * 60 * 24 * 7 * 2  # 2 weeks
 EXPIRATION_HOURS = 24  # MUST MATCH `EXPIRATION_SECONDS`
 
 SALT = os.getenv("VERIFICATION_EMAIL_SALT")

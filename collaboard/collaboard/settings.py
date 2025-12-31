@@ -128,8 +128,8 @@ if not IS_DEV_ENV:
 
 # Redirect definition
 # TODO: Uncomment these later and delete this comment
-# LOGIN_URL: str = "login"
-# LOGOUT_REDIRECT_URL: str = "landing"
+LOGIN_URL: str = "login"
+LOGOUT_REDIRECT_URL: str = "landing"
 
 # Email definition (working via django-sendgrid package)
 SENDGRID_API_KEY = get_env_var("SENDGRID_API_KEY")
