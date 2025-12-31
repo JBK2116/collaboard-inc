@@ -16,8 +16,8 @@ urlpatterns: list[Any] = [
         "password_reset/",
         auth_views.PasswordResetView.as_view(
             template_name="authentication/forgot-password.html",
-            email_template_name="authentication/forgot-password-email.html",
-            html_email_template_name="authentication/forgot-password-email.html",
+            email_template_name="emails/forgot-password-email.html",
+            html_email_template_name="emails/forgot-password-email.html",
             success_url=reverse_lazy("password_reset_done"),
             form_class=PasswordResetForm,
         ),
