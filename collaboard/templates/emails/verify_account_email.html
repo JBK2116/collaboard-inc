@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Verify Your Email | Collaboard</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f5f5f5;
+            }
+
+            .email-wrapper {
+                width: 100%;
+                padding: 40px 20px;
+            }
+
+            .email-container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="email-wrapper">
+            <div class="email-container">
+                <!-- Header -->
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 40px 30px 40px; text-align: center">
+                    <h2 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 600">🚀 Collaboard</h2>
+                </div>
+                <!-- Content -->
+                <div style="padding: 40px 40px 40px 40px">
+                    <h1 style="font-size: 24px; font-weight: 600; color: #333; margin: 0 0 16px 0; text-align: center">Verify Your Email Address</h1>
+                    <p style="font-size: 16px; line-height: 1.6; color: #555; margin: 0 0 32px 0; text-align: center">
+                        Thanks for signing up! We're excited to have you on board. Confirm your email address to start creating meetings.
+                    </p>
+                    <!-- Button -->
+                    <div style="text-align: center; margin: 0 0 32px 0">
+                        <a
+                            href="{{ protocol }}://{{ domain }}{% url 'verify_email' %}?token={{ token }}"
+                            style="
+                                background-color: #667eea;
+                                color: #ffffff;
+                                text-decoration: none;
+                                padding: 14px 40px;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                font-weight: 600;
+                                display: inline-block;
+                            "
+                            target="_blank"
+                        >
+                            Verify Email Address
+                        </a>
+                    </div>
+                    <!-- Alternative Link -->
+                    <p
+                        style="
+                            font-size: 13px;
+                            line-height: 1.5;
+                            color: #666666;
+                            margin: 0;
+                            text-align: center;
+                            padding: 20px 0 0 0;
+                            border-top: 1px solid #e9ecef;
+                        "
+                    >
+                        Or copy and paste this link:<br />
+                        <span style="color: #667eea; word-break: break-all"
+                            >{{ protocol }}://{{ domain }}{% url 'verify_email' %}?token={{ token }}</span
+                        >
+                    </p>
+                    <p style="font-size: 13px; color: #dc3545; margin: 24px 0 0 0; text-align: center; font-weight: 500">
+                        ⏰ This link expires in {{ hours }} hours. If you didn't create an account, you can safely ignore this email.
+                    </p>
+                </div>
+                <!-- Footer -->
+                <div style="padding: 24px 40px; background-color: #f8f9fa; text-align: center; border-top: 1px solid #e9ecef">
+                    <p style="font-size: 12px; color: #999999; margin: 0">This is an automated message, please do not reply to this email.</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

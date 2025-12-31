@@ -1,0 +1,105 @@
+.email-sent-container {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.email-sent-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 480px;
+    padding: 48px 40px;
+    text-align: center;
+}
+
+.icon-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.icon-wrapper svg {
+    color: #667eea;
+}
+
+.email-sent-header {
+    margin-bottom: 32px;
+}
+
+.email-sent-header h1 {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.email-sent-header p {
+    color: #718096;
+    font-size: 1rem;
+    margin: 8px 0;
+}
+
+.email-address {
+    color: #667eea !important;
+    font-weight: 600;
+    font-size: 1.1rem !important;
+    word-break: break-word;
+}
+
+.email-sent-content {
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.email-sent-content p {
+    color: #718096;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 12px 0;
+}
+
+.spam-notice {
+    color: #a0aec0 !important;
+    font-size: 0.875rem !important;
+    margin-top: 16px !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .email-sent-container {
+        padding: 16px;
+        min-height: calc(100vh - 60px);
+    }
+
+    .email-sent-card {
+        padding: 40px 24px;
+    }
+
+    .email-sent-header h1 {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .email-sent-container {
+        padding: 12px;
+    }
+
+    .email-sent-card {
+        padding: 32px 20px;
+    }
+
+    .email-sent-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .icon-wrapper svg {
+        width: 48px;
+        height: 48px;
+    }
+}

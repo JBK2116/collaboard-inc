@@ -1,0 +1,105 @@
+.verification-container {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.verification-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+}
+
+.verification-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.verification-header h1 {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.verification-header p {
+    color: #718096;
+    font-size: 1rem;
+}
+
+.verification-content {
+    text-align: center;
+}
+
+.verification-content p {
+    color: #718096;
+    font-size: 1rem;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.verification-btn-login,
+.verification-btn-signup {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+}
+
+.verification-btn-login:hover,
+.verification-btn-signup:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.verification-btn-login:active,
+.verification-btn-signup:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .verification-container {
+        padding: 16px;
+        min-height: calc(100vh - 60px);
+    }
+
+    .verification-card {
+        padding: 32px 24px;
+    }
+
+    .verification-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .verification-btn-login,
+    .verification-btn-signup {
+        padding: 16px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .verification-container {
+        padding: 12px;
+    }
+
+    .verification-card {
+        padding: 24px 20px;
+    }
+
+    .verification-header h1 {
+        font-size: 1.5rem;
+    }
+}
