@@ -65,7 +65,7 @@ else:
 
 # Application definition
 
-PROJECT_APPS = ["applications.authentication"]
+PROJECT_APPS = ["applications.authentication", "applications.meeting"]
 EXTRA_DEPENDENCY_APPS = ["django_browser_reload"]
 
 INSTALLED_APPS = [
@@ -182,14 +182,83 @@ WSGI_APPLICATION = "collaboard.wsgi.application"
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)  # makes the logs directory if it doesn't exist yet
 
-LOG_FILES = ["django", "auth.log"]  # Add more log files here as needed
+LOG_FILES = [
+    "django.log",
+    "authentication.log",
+    "meeting.log",
+]  # Add more log files here as needed
 
 # creates all log files that don't exist yet
 for log_file in LOG_FILES:
     log_file_path = LOGS_DIR / log_file
     log_file_path.touch(exist_ok=True)
 
-# TODO: Add proper logging in this section
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "json": {
+            "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": "%(levelname)s %(asctime)s %(name)s %(funcName)s %(lineno)d %(message)s",
+        },
+        "verbose": {  # keep for local dev
+            "format": "{levelname:<8} {asctime} | {name}:{funcName}:{lineno} - {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "django": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "django.log",
+            "formatter": "verbose",
+            "maxBytes": 10485760,  # 10MB
+            "backupCount": 3,
+        },
+        "authentication": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "authentication.log",
+            "formatter": "json",
+            "maxBytes": 10485760,  # 10MB
+            "backupCount": 3,
+        },
+        "meeting": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "main.log",
+            "formatter": "json",
+            "maxBytes": 10485760,  # 10MB
+            "backupCount": 3,
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["django", "console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "applications.authentication": {
+            "handlers": ["authentication", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "applications.meeting": {
+            "handlers": ["meeting", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
