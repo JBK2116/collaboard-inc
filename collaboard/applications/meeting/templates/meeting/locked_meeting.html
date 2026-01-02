@@ -1,0 +1,24 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/x-icon" />
+        <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180" />
+        <link href="{% static 'images/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png" />
+        <link href="{% static 'images/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png" />
+        <link href="{% static 'meeting/locked_meeting.css' %}" rel="stylesheet" />
+        <title>Meeting Locked</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="locked-card">
+                <div class="lock-icon">🔒</div>
+                <h1>Meeting Locked</h1>
+                <p class="message">This meeting has already started and is no longer accepting new participants.</p>
+                <p class="sub-message">Please contact the meeting host if you need to join.</p>
+                <a class="back-button" href="{% url 'landing' %}"> ← Back to Home </a>
+            </div>
+        </div>
+    </body>
+</html>

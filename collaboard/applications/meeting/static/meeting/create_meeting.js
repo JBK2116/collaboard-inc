@@ -330,8 +330,6 @@ async function handleFormSubmit(e) {
                 'error',
             );
         }
-        const data = await response.json();
-        console.log(data);
         showNotification('Meeting was created', 'success');
     } catch (error) {
         console.log(error);

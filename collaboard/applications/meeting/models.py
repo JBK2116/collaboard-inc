@@ -1,6 +1,11 @@
 import uuid
 
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    MaxLengthValidator,
+    MaxValueValidator,
+    MinLengthValidator,
+    MinValueValidator,
+)
 from django.db import models
 
 from ..authentication.models import CustomUser
@@ -9,6 +14,12 @@ from ..authentication.models import CustomUser
 # Create your models here.
 class Meeting(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    access_code = models.CharField(
+        null=False,
+        blank=False,
+        validators=[MinLengthValidator(8), MaxLengthValidator(8)],
+        help_text="The access code for participants to join the meeting",
+    )
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
@@ -72,6 +83,9 @@ class Question(models.Model):
         blank=False,
         null=False,
         help_text="the question text",
+    )
+    index = models.PositiveIntegerField(
+        null=False, blank=False, help_text="The index of the question in the meeting"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -230,7 +230,7 @@ LOGGING = {
         "meeting": {
             "level": "INFO",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs" / "main.log",
+            "filename": BASE_DIR / "logs" / "meeting.log",
             "formatter": "json",
             "maxBytes": 10485760,  # 10MB
             "backupCount": 3,

@@ -1,0 +1,62 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/x-icon" />
+        <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180" />
+        <link href="{% static 'images/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png" />
+        <link href="{% static 'images/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png" />
+        <link href="{% static 'meeting/host_meeting.css' %}" rel="stylesheet" />
+        <title>{{ meeting.title }} - Host</title>
+    </head>
+    <body>
+        <main class="host-container">
+            <!-- Meeting Header -->
+            <header class="meeting-header">
+                <h1>{{ meeting.title }}</h1>
+                <div class="description-container" id="description-container">
+                    <p>{{ meeting.description }}</p>
+                </div>
+                <div class="access-code-display">
+                    <span class="code-label">Meeting Code:</span>
+                    <span class="code-value">{{ meeting.access_code }}</span>
+                </div>
+            </header>
+
+            <!-- Control Buttons -->
+            <section class="controls">
+                <button class="btn btn-start" id="start-btn">Start Meeting</button>
+                <button class="btn btn-next" disabled id="next-btn">Next Question</button>
+                <button class="btn btn-end" disabled id="end-btn">End Meeting</button>
+            </section>
+
+            <!-- Question Display -->
+            <section class="question-section">
+                <div class="question-counter">
+                    <span id="current-question-num">0</span> / <span id="total-questions">{{ meeting.questions.count }}</span>
+                </div>
+                <div class="question-text" id="question-text">Waiting to start...</div>
+            </section>
+
+            <!-- Timer -->
+            <section class="timer-section">
+                <div class="timer-display">
+                    <span id="elapsed-time">00:00</span>
+                    <span class="timer-separator">/</span>
+                    <span id="total-time">{{ meeting.duration }}:00</span>
+                </div>
+            </section>
+
+            <!-- Participants -->
+            <section class="participants-section">
+                <h2>Participants (<span id="participant-count">1</span>)</h2>
+                <ul class="participants-list" id="participants-list">
+                    <li>John Smith</li>
+                </ul>
+            </section>
+        </main>
+
+        <script src="{% static 'meeting/meeting_host.js' %}"></script>
+    </body>
+</html>
