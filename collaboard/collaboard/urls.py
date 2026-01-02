@@ -26,6 +26,7 @@ urlpatterns = [
     path("dashboard/", views.dashboard, name="dashboard"),
     path("account/", views.account, name="account"),
     path("auth/", include("applications.authentication.urls")),
+    path("meeting/", include("applications.meeting.urls")),
     path("admin/", admin.site.urls),
 ]
 

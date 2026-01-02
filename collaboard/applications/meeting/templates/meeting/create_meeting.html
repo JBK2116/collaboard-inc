@@ -1,0 +1,92 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Collaboard - Create Meeting</title>
+        <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/x-icon" />
+        <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180" />
+        <link href="{% static 'images/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png" />
+        <link href="{% static 'images/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png" />
+        <link href="{% static 'meeting/create_meeting.css' %}" rel="stylesheet" />
+        <link href="{% static 'navbar_user.css' %}" rel="stylesheet" />
+    </head>
+    <body>
+        {% include 'navbar_user.html' %}
+
+        <div class="notification-container" id="notificationContainer"></div>
+
+        <main class="create-meeting-container">
+            <div class="form-header">
+                <h1>Create New Meeting</h1>
+                <p>Set up your collaborative meeting space</p>
+            </div>
+
+            <form class="create-meeting-form" id="createMeetingForm">
+                {% csrf_token %}
+
+                <div class="form-section">
+                    <h2>Meeting Details</h2>
+
+                    <div class="form-group">
+                        <label for="title">Meeting Title</label>
+                        <input autocomplete="off" class="form-input" id="title" maxlength="200" name="title" required type="text" />
+                        <div class="char-count" id="titleCount">0/200</div>
+                        <div class="error-message" id="titleError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description (Optional)</label>
+                        <textarea autocomplete="off" class="form-textarea" id="description" maxlength="1000" name="description" rows="3"></textarea>
+                        <div class="char-count" id="descriptionCount">0/1000</div>
+                        <div class="error-message" id="descriptionError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Duration (minutes)</label>
+                        <input class="form-input" id="duration" max="60" min="1" name="duration" required type="number" value="30" />
+                        <span class="help-text">Between 1-60 minutes</span>
+                        <div class="error-message" id="durationError"></div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="questions-header">
+                        <h2>Questions</h2>
+                        <button class="btn-add-question" id="addQuestionBtn" type="button">+ Add Question</button>
+                    </div>
+
+                    <div class="questions-container" id="questionsContainer">
+                        <div class="question-item" data-question-index="0">
+                            <div class="question-header">
+                                <span class="question-number">Question 1</span>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <textarea
+                                        autocomplete="off"
+                                        class="form-textarea question-input"
+                                        maxlength="300"
+                                        name="questions[0]"
+                                        placeholder="Enter your question..."
+                                        required
+                                        rows="2"
+                                    ></textarea>
+                                </label>
+                                <div class="char-count">0/300</div>
+                                <div class="error-message"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="window.history.back()" type="button">Cancel</button>
+                    <button class="btn btn-primary" id="submitBtn" type="submit">Create Meeting</button>
+                </div>
+            </form>
+        </main>
+
+        <script src="{% static 'meeting/create_meeting.js' %}"></script>
+    </body>
+</html>
