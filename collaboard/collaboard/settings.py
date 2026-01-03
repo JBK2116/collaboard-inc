@@ -186,6 +186,7 @@ LOG_FILES = [
     "django.log",
     "authentication.log",
     "meeting.log",
+    "root.log",
 ]  # Add more log files here as needed
 
 # creates all log files that don't exist yet
@@ -227,6 +228,14 @@ LOGGING = {
             "maxBytes": 10485760,  # 10MB
             "backupCount": 3,
         },
+        "root": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "logs" / "root.log",
+            "formatter": "json",
+            "maxBytes": 10485760,  # 10MB
+            "backupCount": 3,
+        },
         "meeting": {
             "level": "INFO",
             "class": "logging.handlers.RotatingFileHandler",
@@ -254,6 +263,11 @@ LOGGING = {
         },
         "applications.meeting": {
             "handlers": ["meeting", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "root": {
+            "handlers": ["root", "console"],
             "level": "INFO",
             "propagate": False,
         },

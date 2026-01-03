@@ -2,6 +2,7 @@
 This module stores the business logic to be used in `views.py`
 """
 
+import logging
 import os
 from typing import Any
 
@@ -11,6 +12,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+
+logger = logging.getLogger(__name__)
 
 EXPIRATION_SECONDS = 60 * 60 * 24  # 24 Hours
 SESSION_EXPIRY_SECONDS = 60 * 60 * 24 * 7 * 2  # 2 weeks
@@ -54,7 +57,19 @@ def verify_account_verification_token(token: str) -> dict[str, Any] | None:
             token, salt=SALT, max_age=EXPIRATION_SECONDS
         )
         return payload
-    except (signing.BadSignature, signing.SignatureExpired):
+    except signing.SignatureExpired:
+        logger.log(
+            level=logging.INFO,
+            msg="Email Verification Failed",
+            extra={"reason": "Signature Expired"},
+        )
+        return None
+    except signing.BadSignature:
+        logger.log(
+            level=logging.INFO,
+            msg="Email Verification Failed",
+            extra={"reason": "Bad signature"},
+        )
         return None  # token was tampered with or just expired
 
 
@@ -95,4 +110,9 @@ def send_account_verification_email(
         return True
     except Exception as e:
         print(e.args)
+        logger.log(
+            level=logging.ERROR,
+            msg="Email Verification Failed To Send",
+            extra={"reason": e.args},
+        )
         return False

@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 @require_http_methods(["GET", "POST"])
 def create_meeting(request: HttpRequest) -> JsonResponse:
     if request.method == "POST":
-        # TODO: Handle the post fully
         data: dict[str, Any] = json.loads(request.body)
         new_meeting: Meeting | None = services.create_meeting(
             request.user,
@@ -27,15 +26,27 @@ def create_meeting(request: HttpRequest) -> JsonResponse:
             data.get("duration"),
         )
         if new_meeting is None:
+            logger.log(level=logging.INFO, msg="Meeting Creation Failed")
             return JsonResponse(status=400, data={})
         new_questions: list[Question] | None = services.create_questions(
             new_meeting, data.get("questions")
         )
         if new_questions is None:
+            logger.log(level=logging.INFO, msg="Questions Creation Failed")
             return JsonResponse(status=400, data={})
         new_meeting.save()
+        logger.log(
+            level=logging.INFO,
+            msg="Meeting Creation Successful",
+            extra={"meeting": new_meeting},
+        )
         for q in new_questions:
             q.save()
+        logger.log(
+            level=logging.INFO,
+            msg="Questions Creation Successful",
+            extra={"questions": new_questions},
+        )
         return JsonResponse(data={}, status=200)
     else:
         return render(

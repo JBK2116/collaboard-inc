@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 from django.contrib.auth import authenticate, login
@@ -13,6 +14,8 @@ from .models import CustomUser
 
 # TODO: Add rate limiting to these views via `django-ratelimit` package
 
+logger = logging.getLogger(__name__)
+
 
 @require_http_methods(["GET", "POST"])
 def signup(request: HttpRequest) -> HttpResponse:
@@ -20,6 +23,11 @@ def signup(request: HttpRequest) -> HttpResponse:
         form = SignupForm(request.POST)
         # validate initial form data
         if not form.is_valid():
+            logger.log(
+                level=logging.INFO,
+                msg="Invalid Signup Form",
+                extra={"reasons": f"{form.errors}"},
+            )
             return render(
                 request=request,
                 template_name="authentication/signup.html",
@@ -31,6 +39,11 @@ def signup(request: HttpRequest) -> HttpResponse:
             )
         # ensure no matching user with same email
         if user_exists(form.cleaned_data["email"]):
+            logger.log(
+                level=logging.INFO,
+                msg="Invalid Signup Form",
+                extra={"reasons": f"Email {form.cleaned_data} already exists"},
+            )
             return render(
                 request=request,
                 template_name="authentication/signup.html",
@@ -52,6 +65,11 @@ def signup(request: HttpRequest) -> HttpResponse:
                 context={"email_exists": False, "form": form, "email_sent_error": True},
             )
         # email was sent by now
+        logger.log(
+            level=logging.INFO,
+            msg="Email Verification Sent",
+            extra={"email": form.cleaned_data["email"]},
+        )
         return render(
             request=request,
             template_name="authentication/verify_account_email_sent.html",
@@ -75,12 +93,15 @@ def signup(request: HttpRequest) -> HttpResponse:
 def verify_email(request: HttpRequest) -> HttpResponse:
     token: str | None = request.GET.get("token")
     if not token:
+        logger.log(level=logging.WARNING, msg="Email Verification Token Not Found")
         return render(
             request=request,
             template_name="authentication/email_verified.html",
             context={"email_verified": False},
         )
-    payload: dict[str, Any] | None = services.verify_account_verification_token(token)
+    payload: dict[str, Any] | None = services.verify_account_verification_token(
+        token
+    )  # also handles logging error
     if payload is None:
         return render(
             request=request,
@@ -95,6 +116,7 @@ def verify_email(request: HttpRequest) -> HttpResponse:
     )
     new_user.password = payload["password"]
     new_user.save()
+    logger.log(level=logging.INFO, msg="User Created", extra={"user": new_user})
     return render(
         request=request,
         template_name="authentication/email_verified.html",
@@ -107,6 +129,11 @@ def login_user(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form: LoginForm = LoginForm(request.POST)
         if not form.is_valid():
+            logger.log(
+                level=logging.INFO,
+                msg="Invalid Login Form",
+                extra={"reasons": f"{form.errors}"},
+            )
             return render(
                 request=request,
                 template_name="authentication/login.html",
@@ -121,6 +148,11 @@ def login_user(request: HttpRequest) -> HttpResponse:
             email=form.cleaned_data["email"], password=form.cleaned_data["password"]
         )
         if user is None:
+            logger.log(
+                level=logging.INFO,
+                msg="Invalid Login Form",
+                extra={"reasons": f"Email: {form.cleaned_data['email']} not found"},
+            )
             return render(
                 request=request,
                 template_name="authentication/login.html",
@@ -136,6 +168,7 @@ def login_user(request: HttpRequest) -> HttpResponse:
             request.session.set_expiry(services.SESSION_EXPIRY_SECONDS)
         else:
             request.session.set_expiry(0)  # expire on browser close
+        logger.log(level=logging.INFO, msg="User Logged In", extra={"user": user})
         return redirect("dashboard")
     else:
         if request.user.is_authenticated:
