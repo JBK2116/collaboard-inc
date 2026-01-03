@@ -44,10 +44,10 @@ class Meeting(models.Model):
         default=60,
         null=False,
         blank=False,
-        help_text="The duration of the meeting in seconds",
+        help_text="The duration of the meeting in minutes",
         validators=[
-            MaxValueValidator(60 * 60),
-            MinValueValidator(60),
+            MaxValueValidator(60),
+            MinValueValidator(1),
         ],  # TODO: Update this to 5 minutes later for PROD
     )
     created_at = models.DateTimeField(auto_now_add=True)

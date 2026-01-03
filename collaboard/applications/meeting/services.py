@@ -2,12 +2,16 @@
 This module stores the business logic to be used in `views.py`
 """
 
+import logging
+import uuid
 from random import randint
 
 from django.core.exceptions import ValidationError
 
 from ..authentication.models import CustomUser
 from .models import Meeting, Question
+
+logger = logging.getLogger(__name__)
 
 
 def generate_access_code(num_of_digits: int) -> str:
@@ -33,12 +37,20 @@ def create_meeting(
     try:
         if not title or not description or not duration:
             return None
+        logger.log(
+            level=logging.DEBUG,
+            msg="Creating Meeting",
+            extra={"title": title, "description": description, "duration": duration},
+        )
         meeting = Meeting(
             user=user,
             title=title,
             description=description,
-            duration=int(duration) * 60,
+            duration=int(duration),
             access_code=generate_access_code(8),
+        )
+        logger.log(
+            level=logging.DEBUG, msg="Meeting created", extra={"meeting": meeting}
         )
         meeting.clean()
         return meeting
@@ -68,4 +80,17 @@ def create_questions(
             new_questions.append(new_question)
         return new_questions
     except ValidationError:
+        return None
+
+
+def get_meeting(meeting_id: uuid.UUID) -> Meeting | None:
+    """
+    Gets a meeting object with the given `meeting_id`
+    :param meeting_id: ID of the meeting to retrieve
+    :return: Meeting object if found else None
+    """
+    try:
+        meeting: Meeting = Meeting.objects.get(pk=meeting_id)
+        return meeting
+    except (ValueError, Meeting.DoesNotExist):
         return None

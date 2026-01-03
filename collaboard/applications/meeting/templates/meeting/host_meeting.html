@@ -3,60 +3,93 @@
     <head>
         <meta charset="UTF-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/x-icon" />
-        <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180" />
-        <link href="{% static 'images/favicon-32x32.png' %}" rel="icon" sizes="32x32" type="image/png" />
-        <link href="{% static 'images/favicon-16x16.png' %}" rel="icon" sizes="16x16" type="image/png" />
+        <title>{{ meeting.title }} - Host Control</title>
         <link href="{% static 'meeting/host_meeting.css' %}" rel="stylesheet" />
-        <title>{{ meeting.title }} - Host</title>
     </head>
     <body>
-        <main class="host-container">
-            <!-- Meeting Header -->
-            <header class="meeting-header">
-                <h1>{{ meeting.title }}</h1>
-                <div class="description-container" id="description-container">
-                    <p>{{ meeting.description }}</p>
+        <header class="top-bar">
+            <div class="header-content">
+                <div>
+                    <h1>{{ meeting.title }}</h1>
+                    <span class="badge host-badge">Host: {{ meeting.user.first_name }} {{meeting.user.last_name }}</span>
                 </div>
-                <div class="access-code-display">
-                    <span class="code-label">Meeting Code:</span>
-                    <span class="code-value">{{ meeting.access_code }}</span>
+                <div class="status-indicator" id="meeting-status"><span class="dot"></span> Meeting not started</div>
+            </div>
+        </header>
+
+        <main class="dashboard-grid">
+            <aside class="sidebar">
+                <div class="card highlight-card">
+                    <label>Access Code</label>
+                    <div class="access-code" id="access-code">{{ meeting.access_code }}</div>
+                    <small>Share with participants</small>
                 </div>
-            </header>
 
-            <!-- Control Buttons -->
-            <section class="controls">
-                <button class="btn btn-start" id="start-btn">Start Meeting</button>
-                <button class="btn btn-next" disabled id="next-btn">Next Question</button>
-                <button class="btn btn-end" disabled id="end-btn">End Meeting</button>
-            </section>
-
-            <!-- Question Display -->
-            <section class="question-section">
-                <div class="question-counter">
-                    <span id="current-question-num">0</span> / <span id="total-questions">{{ meeting.questions.count }}</span>
+                <div class="card controls-card">
+                    <h2>Controls</h2>
+                    <div class="button-stack">
+                        <button class="btn btn-primary" id="start-btn">Start Meeting</button>
+                        <button class="btn btn-secondary" disabled id="next-btn">Next Question</button>
+                        <button class="btn btn-danger" disabled id="end-btn">End Meeting</button>
+                    </div>
                 </div>
-                <div class="question-text" id="question-text">Waiting to start...</div>
-            </section>
 
-            <!-- Timer -->
-            <section class="timer-section">
-                <div class="timer-display">
-                    <span id="elapsed-time">00:00</span>
-                    <span class="timer-separator">/</span>
-                    <span id="total-time">{{ meeting.duration }}:00</span>
+                <div class="card details-card">
+                    <h3>Details</h3>
+
+                    <div class="description-block">
+                        <label>About this meeting</label>
+                        <p>{{ meeting.description|truncatechars:200 }}</p>
+                    </div>
+
+                    <div class="detail-row">
+                        <span>Date</span>
+                        <strong>{{ meeting.created_at|date:"M j, Y" }}</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Duration</span>
+                        <strong><span id="duration">{{meeting.duration}}</span> min</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Participants</span>
+                        <strong><span id="participant-count">0</span></strong>
+                    </div>
                 </div>
-            </section>
+            </aside>
 
-            <!-- Participants -->
-            <section class="participants-section">
-                <h2>Participants (<span id="participant-count">1</span>)</h2>
-                <ul class="participants-list" id="participants-list">
-                    <li>John Smith</li>
-                </ul>
+            <section class="main-content">
+                <div class="card question-card">
+                    <div class="card-header">
+                        <h2>Current Question</h2>
+                        <span class="counter"
+                            >Q <span id="current-question-num">0</span> / <span id="total-questions">{{ meeting.questions.count }}</span></span
+                        >
+                    </div>
+
+                    <div class="question-box">
+                        <p id="question-text">Waiting to start...</p>
+                    </div>
+
+                    <div class="submission-area">
+                        <div class="sub-header">
+                            <label>Live Submissions</label>
+                            <span id="submission-count">0 / 0</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="submission-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card participants-card">
+                    <h2>Participants</h2>
+                    <div class="scroll-list" id="participants-list">
+                        <p class="empty-state">No participants joined yet.</p>
+                    </div>
+                </div>
             </section>
         </main>
 
-        <script src="{% static 'meeting/meeting_host.js' %}"></script>
+        <script src="{% static 'meeting/host_meeting.js' %}"></script>
     </body>
 </html>

@@ -4,16 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('meeting', '0002_meeting_access_code'),
+        ("meeting", "0002_meeting_access_code"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='question',
-            name='index',
-            field=models.PositiveIntegerField(default=0, help_text='The index of the question in the meeting'),
+            model_name="question",
+            name="index",
+            field=models.PositiveIntegerField(
+                default=0, help_text="The index of the question in the meeting"
+            ),
             preserve_default=False,
         ),
     ]

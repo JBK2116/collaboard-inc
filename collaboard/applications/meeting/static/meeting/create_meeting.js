@@ -330,6 +330,11 @@ async function handleFormSubmit(e) {
                 'error',
             );
         }
+        const data = await response.json();
+        console.log(data);
+        if (data.redirect) {
+            window.location.href = data.redirect;
+        }
         showNotification('Meeting was created', 'success');
     } catch (error) {
         console.log(error);

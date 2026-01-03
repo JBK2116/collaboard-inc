@@ -5,16 +5,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('meeting', '0001_initial'),
+        ("meeting", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='meeting',
-            name='access_code',
-            field=models.CharField(default=12345678, help_text='The access code for participants to join the meeting', validators=[django.core.validators.MinLengthValidator(8), django.core.validators.MaxLengthValidator(8)]),
+            model_name="meeting",
+            name="access_code",
+            field=models.CharField(
+                default=12345678,
+                help_text="The access code for participants to join the meeting",
+                validators=[
+                    django.core.validators.MinLengthValidator(8),
+                    django.core.validators.MaxLengthValidator(8),
+                ],
+            ),
             preserve_default=False,
         ),
     ]

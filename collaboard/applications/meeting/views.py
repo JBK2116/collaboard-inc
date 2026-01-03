@@ -1,11 +1,12 @@
 # Create your views here.
 import json
 import logging
+import uuid
 from typing import Any
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import render, reverse
 from django.views.decorators.http import require_http_methods
 
 from ..meeting import services
@@ -47,7 +48,13 @@ def create_meeting(request: HttpRequest) -> JsonResponse:
             msg="Questions Creation Successful",
             extra={"questions": new_questions},
         )
-        return JsonResponse(data={}, status=200)
+        return JsonResponse(
+            data={
+                "redirect": reverse(
+                    "host_meeting", kwargs={"meeting_id": new_meeting.pk}
+                )
+            },
+        )
     else:
         return render(
             request=request, template_name="meeting/create_meeting.html", context={}
@@ -68,7 +75,17 @@ def end_meeting_participant(request: HttpRequest) -> HttpResponse:
 
 @login_required
 @require_http_methods(["GET"])
-def host_meeting(request: HttpRequest) -> HttpResponse:
+def host_meeting(request: HttpRequest, meeting_id: uuid.UUID) -> Http404 | Any:
+    meeting: Meeting | None = services.get_meeting(meeting_id)
+    if meeting is None:
+        logger.log(
+            level=logging.WARNING,
+            msg="Meeting Not Found",
+            extra={"meeting_id": meeting_id},
+        )
+        raise Http404("Meeting not found")
     return render(
-        request=request, template_name="meeting/host_meeting.html", context={}
+        request=request,
+        template_name="meeting/host_meeting.html",
+        context={"meeting": meeting},
     )
